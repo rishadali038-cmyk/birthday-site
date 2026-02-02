@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday My Love ❤️</title>
+<style>
+/* === General Styles === */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.container {
+  padding: 40px 20px;
+}
+
+h1, h2, h3 {
+  margin: 15px 0;
+}
+
+button {
+  background: white;
+  color: #ff4d6d;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 30px;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+#game1, #game2, #game3, #letter, #final {
+  display: none;
+}
+
+.heart {
+  font-size: 2.5em;
+  cursor: pointer;
+  position: absolute;
+  animation: float 2s infinite;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message {
+  margin: 20px 0;
+  font-size: 1.2em;
+  animation: fadeIn 2s ease;
+}
+
+/* Confetti placeholder */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #ff4d6d;
+  top: -10px;
+  animation: confettiFall 3s linear infinite;
+}
+
+@keyframes confettiFall {
+  to { transform: translateY(100vh) rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- === Intro Screen === -->
+<div class="container" id="intro">
+  <h1>🎂 Happy Birthday, My Love ❤️</h1>
+  <p>Today isn’t just your birthday…  
+  it’s the day the world got someone incredibly special.</p>
+  <button onclick="startGame1()">Tap to Begin 💕</button>
+</div>
+
+<!-- === Game 1: Catch Hearts === -->
+<div class="container" id="game1">
+  <h2>Catch the Hearts 💖</h2>
+  <p>Tap 5 hearts to unlock a sweet message for you</p>
+  <div id="hearts"></div>
+</div>
+
+<!-- === Game 2: Love Quiz === -->
+<div class="container" id="game2">
+  <h2>Love Quiz ❤️</h2>
+  <p>Answer these questions about us!</p>
+  <div id="quiz"></div>
+  <button id="quizSubmit" onclick="checkQuiz()">Submit Answers</button>
+  <p id="quizResult"></p>
+</div>
+
+<!-- === Game 3: Secret Code === -->
+<div class="container" id="game3">
+  <h2>Secret Code 🔐</h2>
+  <p>Type the code I gave you to reveal my special message</p>
+  <input type="text" id="codeInput" placeholder="Enter the code">
+  <button onclick="checkCode()">Reveal Message</button>
+  <p id="codeResult"></p>
+</div>
+
+<!-- === Scrolling Love Letter === -->
+<div class="container" id="letter">
+  <h2>My Sweetheart 🥹❤️</h2>
+  <p class="message">
+    Sweetheart…  
+    I don’t even know where to begin.  
+    You are not just someone I love —  
+    you are someone who changed me forever.
+  </p>
+  <p class="message">
+    Every smile of yours feels like home.  
+    Every time you laugh, something inside me heals.  
+    And every moment with you reminds me how lucky I am.
+  </p>
+  <p class="message">
+    On your birthday, I just want you to know this:  
+    You are deeply loved.  
+    You are incredibly precious.  
+    And you mean more to me than words will ever be able to explain.
+  </p>
+  <button onclick="showFinal()">See My Big Surprise ❤️</button>
+</div>
+
+<!-- === Final Surprise === -->
+<div class="container" id="final">
+  <h1>🎉 I LOVE YOU ❤️🎉</h1>
+  <p>You are my everything, today and always.</p>
+  <p>— Yours, forever 💖</p>
+</div>
+
+<script>
+// === Game 1: Catch Hearts ===
+let count = 0;
+
+function startGame1() {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("game1").style.display = "block";
+  spawnHeart();
+}
+
+function spawnHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * (window.innerWidth - 50) + "px";
+  heart.style.top = Math.random() * (window.innerHeight - 200) + "px";
+  heart.onclick = () => {
+    heart.remove();
+    count++;
+    // bonus messages
+    const bonus = document.createElement("p");
+    bonus.className = "message";
+    bonus.textContent = "You make my heart skip a beat 💓";
+    document.getElementById("game1").appendChild(bonus);
+    setTimeout(() => bonus.remove(), 2000);
+    if (count >= 5) {
+      document.getElementById("game1").style.display = "none";
+      startGame2();
+    } else {
+      spawnHeart();
+    }
+  };
+  document.getElementById("hearts").appendChild(heart);
+}
+
+// === Game 2: Love Quiz ===
+const quizData = [
+  {q: "Where did we first meet?", a: "school"},
+  {q: "What is my favorite thing about you?", a: "smile"},
+  {q: "My favorite color you wear?", a: "red"}
+];
+
+function startGame2() {
+  document.getElementById("game2").style.display = "block";
+  const quizDiv = document.getElementById("quiz");
+  quizDiv.innerHTML = "";
+  quizData.forEach((item, index) => {
+    quizDiv.innerHTML += `
+      <p>${item.q}</p>
+      <input type="text" id="answer${index}" placeholder="Type your answer">
+    `;
+  });
+}
+
+function checkQuiz() {
+  let score = 0;
+  quizData.forEach((item, index) => {
+    const val = document.getElementById(`answer${index}`).value.toLowerCase().trim();
+    if(val === item.a) score++;
+  });
+  const result = document.getElementById("quizResult");
+  if(score === quizData.length) {
+    result.textContent = "Perfect! You know me so well 💖";
+    setTimeout(() => {
+      document.getElementById("game2").style.display = "none";
+      document.getElementById("game3").style.display = "block";
+    }, 1500);
+  } else {
+    result.textContent = `Almost! Score: ${score}/${quizData.length}. Try again or keep going ❤️`;
+  }
+}
+
+// === Game 3: Secret Code ===
+const secretCode = "iloveyou";
+
+function checkCode() {
+  const val = document.getElementById("codeInput").value.toLowerCase().trim();
+  const res = document.getElementById("codeResult");
+  if(val === secretCode) {
+    res.textContent = "💖 Code correct! Unlocking your special message...";
+    setTimeout(() => {
+      document.getElementById("game3").style.display = "none";
+      document.getElementById("letter").style.display = "block";
+    }, 1500);
+  } else {
+    res.textContent = "Wrong code 😅 Try again!";
+  }
+}
+
+// === Final Surprise ===
+function showFinal() {
+  document.getElementById("letter").style.display = "none";
+  document.getElementById("final").style.display = "block";
+  // simple confetti animation
+  for(let i=0;i<100;i++){
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*window.innerWidth+"px";
+    c.style.animationDelay = Math.random()*3+"s";
+    document.body.appendChild(c);
+  }
+}
+</script>
+
+</body>
+</html>
